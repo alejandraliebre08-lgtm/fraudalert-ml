@@ -322,28 +322,34 @@ de patrones de fraude en Mercado Libre Argentina.
 """
         nivel = "URL e ID únicamente"
 
-    prompt = f"""Actuá como especialista en detección de fraude y análisis de riesgo en e-commerce,
-con experiencia específica en Mercado Libre Argentina.
+    prompt = f"""Actuá como un especialista en detección de fraude y análisis de riesgo en e-commerce, con experiencia específica en Mercado Libre Argentina.
 
-Analizá esta publicación. Información disponible ({nivel}):
+Tu objetivo es ayudar a los compradores a identificar posibles estafas, publicaciones engañosas o comportamientos riesgosos antes de realizar una compra. Debés analizar la información disponible y determinar si la publicación presenta señales de confianza o indicadores de riesgo.
 
+Información disponible ({nivel}):
 {bloque}
 
-CRITERIOS DE EVALUACIÓN:
-- Precio >40% menor al mercado → riesgo ALTO
-- Vendedor nuevo sin reputación → riesgo ALTO
-- Vendedor MercadoLíder con muchas ventas → señal de CONFIANZA fuerte
-- Keyword stuffing en el título → riesgo MEDIO
-- Solicitar pago fuera de ML/Mercado Pago → riesgo MUY ALTO
-- Precio acorde al mercado → señal de CONFIANZA
+Analizá toda la información disponible teniendo en cuenta las prácticas habituales de Mercado Libre Argentina y los mecanismos de fraude más frecuentes.
 
-INSTRUCCIONES:
-- Usá SOLO los datos disponibles, no inventes información
-- Si los datos son insuficientes, usá INFORMACIÓN INSUFICIENTE
-- No seas alarmista sin evidencia concreta
-- Sé específico y útil para el comprador argentino
+Prestá especial atención a:
+- Precios significativamente inferiores al valor normal de mercado.
+- Solicitudes de pago por fuera de Mercado Pago.
+- Pedidos de transferencias, señas o adelantos de dinero.
+- Publicación de teléfonos, redes sociales o datos de contacto externos.
+- Intentos de continuar la operación fuera de la plataforma.
+- Descripciones vagas, contradictorias o incompletas.
+- Fotografías genéricas, de baja calidad o aparentemente copiadas.
+- Métodos de envío inusuales o poco claros.
+- Comentarios negativos recurrentes.
+- Inconsistencias entre el producto ofrecido, las imágenes y la descripción.
+- Cuentas que muestran comportamientos atípicos o poco coherentes con su historial.
 
-Respondé EXACTAMENTE con este formato:
+No asumas que existe fraude si no hay evidencia suficiente.
+No inventes información que no haya sido proporcionada.
+Si algún dato importante no está disponible, indicá expresamente que no pudo ser evaluado.
+No consideres automáticamente riesgosa una publicación únicamente porque el vendedor tenga pocas ventas o porque el precio sea bajo.
+
+Al finalizar, generá la respuesta utilizando exactamente el siguiente formato:
 
 Clasificación: [SEGURA / SOSPECHOSA / PELIGROSA / INFORMACIÓN INSUFICIENTE]
 Score de riesgo: XX/100
@@ -359,7 +365,17 @@ Qué verificar antes de comprar:
 - 
 
 Nivel de confianza del análisis: [Alto / Medio / Bajo]
-Justificación:
+Justificación: [Una única oración explicando por qué el nivel de confianza es alto, medio o bajo según la cantidad y calidad de la información disponible].
+
+Reglas obligatorias:
+- Los motivos deben ser exactamente 3.
+- Cada motivo debe estar basado únicamente en información observada.
+- No utilizar lenguaje alarmista.
+- No afirmar que existe una estafa si la evidencia no es concluyente.
+- Mantener un tono profesional, objetivo y neutral.
+- Responder siempre en español.
+- Si detectás evidencia clara de intento de operar fuera de Mercado Libre o de evitar Mercado Pago, aumentar significativamente el score de riesgo.
+- Si faltan datos relevantes para el análisis, reflejar esa limitación en el nivel de confianza.
 """
 
     response = client.models.generate_content(
